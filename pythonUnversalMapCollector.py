@@ -8,7 +8,7 @@ import cutForPrint
 
 
 class MapCollector:
-    def __init__(self, initLink, width, height, boundSize=500, pointIsCenter=True, sidebar=[]):
+    def __init__(self, initLink, width, height, boundSize=500, pointIsCenter=True, bodyXpath="/html/body", controls=[]):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         self.browser = webdriver.Chrome(options=chrome_options)
@@ -18,8 +18,9 @@ class MapCollector:
         self.height = height
         self.boundSize = boundSize
         self.boundSizeHalf = boundSize // 2
+        self.bodyXpath = bodyXpath
         self.body = self.getbody()
-        for i in sidebar:
+        for i in controls:
             try:
                 self.browser.find_element_by_class_name(i).click()
             except:
@@ -56,7 +57,7 @@ class MapCollector:
         return self
 
     def getbody(self):
-        return self.browser.find_element_by_tag_name("body")
+        return self.browser.find_element_by_xpath(self.bodyXpath)
 
     def smallScreenShoot(self, img):
         return img.crop([x // 2 + s for s in [-self.boundSizeHalf, self.boundSizeHalf] for x in img.size])
@@ -81,30 +82,33 @@ class MapCollector:
                     finalScreenShoot.paste(smallScreenShoot(im), (x if sign > 0 else reverse - x, y))
                     if widminusbs - x > 0:
                         self.slideToOffset(-boundSize * sign, 0)
-                    pbar.update(1)
-                finalScreenShoot.save("resultmap.png")
+                    pbar.update(1) 
                 sign *= -1
                 self.slideToOffset(0, -boundSize)
         return finalScreenShoot
 
 
 if __name__ == "__main__":
-
     INIT_LINK = "https://yandex.ru/maps/213/moscow/?ll=37.622504%2C55.753215&z=15"  # 14 захватит ЦКАД при размерах ниже
+    INIT_LINK = "https://2gis.ru/moscow?m=37.622446%2C55.75377%2F15"
 
     SCREENSHOOT_WIDTH = 14472
     SCREENSHOOT_HEIGHT = 17060
 
     SCREENSHOOT_self_boundSize = 500  # Different services have different safe zones
 
-    SIDEBAR = {
-        "yandex": ["sidebar-toggle-button__icon"]
+    PARAMETERS = {
+        "yandex": {'controls': ["sidebar-toggle-button__icon"], 'path': "/html/body"},
+        "2gis": {'controls': ["_k1uvy"], 'path': '//*[@id="root"]/div/div'},
     }
 
-    SIDEBAR = next((x[1] for x in SIDEBAR.items() if x[0] in INIT_LINK), None)
+    params = next((x[1] for x in PARAMETERS.items() if x[0] in INIT_LINK), None)
 
     collector = MapCollector(INIT_LINK, SCREENSHOOT_WIDTH, SCREENSHOOT_HEIGHT, SCREENSHOOT_self_boundSize,
-                             pointIsCenter=True, sidebar=SIDEBAR)
+                             bodyXpath=params["path"],
+                             pointIsCenter=True,
+                             controls=params["controls"]
+                             )
 
     shoot = collector.finalShoot()
     shoot.save("resultmap.png")

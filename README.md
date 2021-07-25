@@ -34,12 +34,21 @@ MapCollector(
     SCREENSHOOT_WIDTH, 
     SCREENSHOOT_HEIGHT, 
     SCREENSHOOT_self_boundSize,
+    bodyXpath=params["path"],
     pointIsCenter=True, # point in link center or upper left corner
-    sidebar=SIDEBAR
+    controls=params["controls"]
 )
 ```
 
-`sidebar` - a dictionary with lists of element classes to "close" before collecting
+`controls` - a dictionary with lists of element classes to "close" before collecting. It will be clicked.
+`params` - a dictionary with specific constants for services. Example:
+
+```Python
+{
+    'controls': ["sidebar-toggle-button__icon"], 
+    'path': "/html/body"
+}
+```
 
 ## Dependencies
 - selenium
