@@ -7,7 +7,7 @@ Script automatically moves around the specified area of the map, takes screensho
 2. [Dependencies](#Dependencies)
 3. [Speed](#Speed)
 4. [Bonus](#Bonus)
-	[! Note](#!-Note)
+5. [! Note](#!-Note)
 
 ## Parameters
 You should set:
@@ -52,8 +52,7 @@ MapCollector(
 
 ## Dependencies
 - selenium
-- PIL
-- io
+- Pillow
 - tqdm
 
 Also you need `Chrome` and actual version [`Selenium Chrome Driver`](https://chromedriver.chromium.org/downloads)

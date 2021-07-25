@@ -82,7 +82,7 @@ class MapCollector:
                     finalScreenShoot.paste(smallScreenShoot(im), (x if sign > 0 else reverse - x, y))
                     if widminusbs - x > 0:
                         self.slideToOffset(-boundSize * sign, 0)
-                    pbar.update(1) 
+                    pbar.update(1)
                 sign *= -1
                 self.slideToOffset(0, -boundSize)
         return finalScreenShoot
