@@ -3,12 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+png/
 
 chromedriver.exe
 
 # C extensions
 *.so
 *.png
+.idea
 
 # Distribution / packaging
 .Python
