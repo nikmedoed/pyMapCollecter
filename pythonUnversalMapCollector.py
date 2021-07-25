@@ -6,19 +6,6 @@ from tqdm import tqdm
 from selenium.webdriver.chrome.options import Options
 import cutForPrint
 
-INIT_LINK = "https://yandex.ru/maps/213/moscow/?ll=37.622504%2C55.753215&z=13"
-
-SCREENSHOOT_WIDTH = 14472
-SCREENSHOOT_HEIGHT = 17060
-
-SCREENSHOOT_self_boundSize = 500  # Different services have different safe zones
-
-SIDEBAR = {
-    "yandex": ["sidebar-toggle-button__icon"]
-}
-
-SIDEBAR = next((x[1] for x in SIDEBAR.items() if x[0] in INIT_LINK), None)
-
 
 class MapCollector:
     def __init__(self, initLink, width, height, boundSize=500, pointIsCenter=True, sidebar=[]):
@@ -61,7 +48,7 @@ class MapCollector:
                 pbar.update(toMoveX + toMoveY)
                 if distanceToStartX == 0 and distanceToStartY == 0:
                     break
-        print("At the start position")
+        print("The starting position is occupied")
 
     def slideToOffset(self, x, y):
         webdriver.ActionChains(self.browser).click_and_hold(self.getbody()).move_by_offset(x, y).release().perform()
@@ -84,7 +71,7 @@ class MapCollector:
         finalScreenShoot = Image.new('RGB', (width, height))
         sign = 1
         widminusbs = width - boundSize
-        reverse = width - width % boundSize - boundSize
+        reverse = width - width % boundSize
         with tqdm(desc="CollectingMap", total=((height // boundSize + (1 if height % boundSize > 0 else 0)) * (
                 width // boundSize + (1 if width % boundSize > 0 else 0)))) as pbar:
             for y in range(0, height, boundSize):
@@ -95,14 +82,31 @@ class MapCollector:
                     if widminusbs - x > 0:
                         self.slideToOffset(-boundSize * sign, 0)
                     pbar.update(1)
+                finalScreenShoot.save("resultmap.png")
                 sign *= -1
                 self.slideToOffset(0, -boundSize)
         return finalScreenShoot
 
 
-collector = MapCollector(INIT_LINK, SCREENSHOOT_WIDTH, SCREENSHOOT_HEIGHT, SCREENSHOOT_self_boundSize,
-                         pointIsCenter=True, sidebar=SIDEBAR)
-shoot = collector.finalShoot()
-shoot.save("resultmap.png")
-cutForPrint.cut(shoot, 6, 5)
-# shoot.show()
+if __name__ == "__main__":
+
+    INIT_LINK = "https://yandex.ru/maps/213/moscow/?ll=37.622504%2C55.753215&z=15"  # 14 захватит ЦКАД при размерах ниже
+
+    SCREENSHOOT_WIDTH = 14472
+    SCREENSHOOT_HEIGHT = 17060
+
+    SCREENSHOOT_self_boundSize = 500  # Different services have different safe zones
+
+    SIDEBAR = {
+        "yandex": ["sidebar-toggle-button__icon"]
+    }
+
+    SIDEBAR = next((x[1] for x in SIDEBAR.items() if x[0] in INIT_LINK), None)
+
+    collector = MapCollector(INIT_LINK, SCREENSHOOT_WIDTH, SCREENSHOOT_HEIGHT, SCREENSHOOT_self_boundSize,
+                             pointIsCenter=True, sidebar=SIDEBAR)
+
+    shoot = collector.finalShoot()
+    shoot.save("resultmap.png")
+    cutForPrint.cut(shoot, 6, 5)
+    print("Gotcha")

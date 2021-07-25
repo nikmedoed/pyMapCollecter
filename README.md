@@ -3,17 +3,21 @@ Save map to big PNG from any cartographic resource (Yandex.maps, Google Maps etc
 
 Script automatically moves around the specified area of the map, takes screenshots of small areas and combines them into a large picture.
 
-[TOC]
+1. [Parameters](#Parameters)
+2. [Dependencies](#Dependencies)
+3. [Speed](#Speed)
+4. [Bonus](#Bonus)
+	[! Note](#!-Note)
 
 ## Parameters
 You should set:
 
 - `INIT_LINK` - a link to the desired point with the selected scale.
 - `SCREENSHOOT_WIDTH`, `SCREENSHOOT_HEIGHT` - size of the final image.
-- `SCREENSHOOT_self_boundSize` - save zone for screenshoot. Different services have different safe zones. This depends on the size of the browser window and the location of the map controls.
+- `SCREENSHOOT_self_boundSize` - save zone for screenshoot. Different services have different safe zones. This depends on the browser window size and map controls location.
 
 Example:
-```
+```Python
 INIT_LINK = "https://yandex.ru/maps/213/moscow/?ll=37.624027%2C55.753747&z=15.68"
 
 SCREENSHOOT_WIDTH = 30000
@@ -24,7 +28,7 @@ SCREENSHOOT_self_boundSize = 500
 
 The collector is wrapped in a class `MapCollector`
 
-```
+```Python
 MapCollector(
     INIT_LINK,  
     SCREENSHOOT_WIDTH, 
