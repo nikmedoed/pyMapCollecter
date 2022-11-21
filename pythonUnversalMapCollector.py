@@ -5,13 +5,14 @@ from io import BytesIO
 from tqdm import tqdm
 from selenium.webdriver.chrome.options import Options
 import cutForPrint
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class MapCollector:
     def __init__(self, initLink, width, height, boundSize=500, pointIsCenter=True, bodyXpath="/html/body", controls=[]):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        self.browser = webdriver.Chrome(options=chrome_options)
+        self.browser = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
         self.browser.set_window_size(2000, 2000)
         self.browser.get(initLink)
         self.width = width

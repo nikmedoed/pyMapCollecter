@@ -6,6 +6,7 @@ Script automatically moves around the specified area of the map, takes screensho
 1. [Parameters](#Parameters)
 2. [Dependencies](#Dependencies)
 3. [Speed](#Speed)
+3. [Miro](#Miro)
 4. [Bonus](#Bonus)
 5. [! Note](#!-Note)
 
@@ -63,6 +64,9 @@ The map of `30 000` by `45 000` pixels was collected for `2 hours and 35 minutes
 The final `PNG` weighs `405 MB`.
 
 ![](dev/example.jpg)
+
+## Miro
+`Miro_board_grabber.ipynb` - adaptation for free Miro boards grabbing in HiRes. It works analogically.
 
 ## Bonus
 `cutForPrint.py` - a script for cutting a large image into small ones for printing on paper.
